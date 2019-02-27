@@ -11,6 +11,10 @@ function pokemonUrl(){
   return url = `http://localhost:3000/pokemons`
 }
 
+function indPkemonUrl(pokemon){
+  return url = `http://localhost:3000/pokemons/${pokemon.id}`
+}
+
 function fetchTrainer(){
   fetch(trainerURL())
   .then(res=> res.json())
@@ -30,6 +34,12 @@ function fetchPokemon(trainer){
   .then(json => getPokemon(json))
 }
 
+function deletePoke(pokemon){
+fetch(indPkemonUrl(pokemon),{
+  method: `DELETE`,
+})
+}
+
 function getTrainers(json){
   json.forEach((trainer) => renderTrainerDiv(trainer))
 }
@@ -45,12 +55,12 @@ function renderTrainerDiv(trainer){
   trainerUlist.id=(`ul-${trainer.id}`)
   trainerButton.id = `button-${trainer.id}`
   trainerButton.innerText = `Add Pokemon`
-  trainerButton.addEventListener("click", ()=>{fetchPokemon(trainer)})
+  // trainerButton.addEventListener("click", ()=>{fetchPokemon(trainer)})
   trainerPTag.innerText = trainer.name
   trainerDiv.append(trainerPTag, trainerButton, trainerUlist)
   mainTag.appendChild(trainerDiv)
   trainerPokemon(trainer)
-
+ trainerButton.addEventListener("click", ()=>{fetchPokemon(trainer)})
 }
 
 function trainerPokemon(trainer){
@@ -64,12 +74,16 @@ function renderPoke(trainer, pokemon){
   let button = document.createElement('button')
   button.innerText = `Release`
   button.classList.add(`release`)
-  li.id = pokemon.id
+  li.id = `pokemon-${pokemon.id}`
   li.innerText = `${pokemon.nickname}`
+  button.addEventListener("click", ()=>{releasePokemon(event,trainer,pokemon)})
   li.appendChild(button)
   ul.append(li)
 }
 
-function getPokemon(pokemon){
-  
+function releasePokemon(event,trainer, pokemon){
+  let trainerUL = document.getElementById(`ul-${trainer.id}`)
+  let pokemonli = document.getElementById(`pokemon-${pokemon.id}`)
+  trainerUL.removeChild(pokemonli)
+  deletePoke(pokemon)
 }
