@@ -18,16 +18,15 @@ function fetchTrainer(){
 }
 
 function fetchPokemon(trainer){
+  let data = {trainer_id: trainer.id}
   fetch(pokemonUrl(),{
     method: `POST`,
     headers: {
             "Content-Type": "application/json"
           },
-    body: {
-      JSON.stringify(`${trainer.id}`)
-    },
+    body: JSON.stringify(data),
   })
-  .then(res = res.json())
+  .then(res => res.json())
   .then(json => getPokemon(json))
 }
 
@@ -46,12 +45,12 @@ function renderTrainerDiv(trainer){
   trainerUlist.id=(`ul-${trainer.id}`)
   trainerButton.id = `button-${trainer.id}`
   trainerButton.innerText = `Add Pokemon`
-  trainerButton.addEventListener("click", function(){
-    fetchPokemon(trainer)})
+  trainerButton.addEventListener("click", ()=>{fetchPokemon(trainer)})
   trainerPTag.innerText = trainer.name
   trainerDiv.append(trainerPTag, trainerButton, trainerUlist)
   mainTag.appendChild(trainerDiv)
   trainerPokemon(trainer)
+
 }
 
 function trainerPokemon(trainer){
@@ -71,6 +70,6 @@ function renderPoke(trainer, pokemon){
   ul.append(li)
 }
 
-function getPokemon(trainer){
-  console.log(trainer.name)
+function getPokemon(pokemon){
+  
 }
